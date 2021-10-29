@@ -93,15 +93,17 @@ def best_play(open_boxes, cross_boxes, circle_boxes):
                 for _ in range(10):
                     first_moves.append('mc')
                 return random.choice(first_moves)
-            if 'mc' not in open_box_names and len(circle_boxes) < 2:
-                if random.choice(range(1, 4)) != 2:
-                    corners = ['tl', 'tr', 'bl', 'br']
-                    available_corners = []
-                    for corner in corners:
-                        if corner in open_box_names:
-                            available_corners.append(corner)
-                    return random.choice(available_corners)
-                return random.choice(open_box_names)
+
+            # evil mode commented out, else the  user might cry
+
+            # if 'mc' not in open_box_names and len(circle_boxes) < 2:
+            #     corners = ['tl', 'tr', 'bl', 'br']
+            #     available_corners = []
+            #     for corner in corners:
+            #         if corner in open_box_names:
+            #             available_corners.append(corner)
+            #     return random.choice(available_corners)
+
             return random.choice(open_box_names)
         return try_win(cross_boxes, open_boxes)
     return try_win(circle_boxes, open_boxes)
@@ -235,7 +237,7 @@ def series_result(win_games, lose_games):
     if win_games > lose_games:
         print(f'You have won the series {win_games} - {lose_games} !')
     elif lose_games > win_games:
-        # the user is dumber than Trump
+        # the user is somehow dumber than me!
         print(f'You have lost the series {win_games} - {lose_games} !')
     else:
         print(f'The series has ended in a draw {win_games} - {lose_games} !')
@@ -311,7 +313,7 @@ def series():
                         lose_games += 1
 
     # the series is over
-    print('_'*79 + '\nPlease close the turtle window when you\'re done\n')
+    print('_'*79 + '\n\nPlease close the turtle window when you\'re done\n')
     turtle.mainloop()
     series_result(win_games, lose_games)
 
