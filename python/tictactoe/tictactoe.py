@@ -6,7 +6,7 @@ from grid import grid, box_mark_cross, box_mark_circle
 
 
 def check_win(check_boxes):
-    """Specifies the win condition for the side"""
+    """Check if a side has won"""
     # choosing coordinates of three boxes
     for x_coord_1, y_coord_1 in check_boxes:
         coords_1 = []
@@ -33,8 +33,7 @@ def check_win(check_boxes):
 
 
 def cont(open_boxes, cross_boxes, circle_boxes):
-    """This function returns true if the game is to be continued
-     and false if the game is over"""
+    """Decide whether to continue the game or not"""
     # only need to check if there are 3 or more of the same symbol
     # why is this condition being checked twice? idk, it's not anymore
     # :)
@@ -48,8 +47,7 @@ def cont(open_boxes, cross_boxes, circle_boxes):
 
 
 def try_win(check_boxes, open_boxes):
-    """This function returns the box which if marked,
-     gives the side a win"""
+    """Checks for possible wins"""
     open_box_names = list(open_boxes.keys())
     for x_coord_1, y_coord_1 in check_boxes:
         coords_1 = []
@@ -83,8 +81,7 @@ def try_win(check_boxes, open_boxes):
 
 
 def best_play(open_boxes, cross_boxes, circle_boxes):
-    """This function returns the best move
-    that the computer can play"""
+    """Returns the computer's move"""
     open_box_names = list(open_boxes.keys())
     while not try_win(circle_boxes, open_boxes):
         if not try_win(cross_boxes, open_boxes):
@@ -231,9 +228,7 @@ def comp_game(size=600):
 
 
 def series_result(win_games, lose_games):
-    """Takes the number of games and the won and lost games and
-    returns who is the overall winner
-    """
+    """Determine the result of a series"""
     if win_games > lose_games:
         print(f'You have won the series {win_games} - {lose_games} !')
     elif lose_games > win_games:
@@ -244,7 +239,7 @@ def series_result(win_games, lose_games):
 
 
 def toss():
-    """"Toss a coin and return the  result"""
+    """Toss a coin and return the  result"""
     side = input('\nHeads or tails?: ').lower()
     prob_sides = ['heads', 'tails']
     toss = random.choice(prob_sides)
@@ -258,8 +253,8 @@ def toss():
     return result
 
 
-def series():
-    """Play a series of tictactoe games(and lose cos you suck)"""
+def series(size=600):
+    """Play a series of tictactoe games"""
     games = int(input('How many games do you want to play?: '))
     # alternates between who gets to start first
     win_games = lose_games = 0
@@ -285,28 +280,28 @@ def series():
             # it alternates
             if chance % 2 == 1:
                 if toss_result:
-                    result = user_game()
+                    result = user_game(size)
                     if result:
                         win_games += 1
                     elif result is False:
                         lose_games += 1
                 else:
-                    result = comp_game()
+                    result = comp_game(size)
                     if result:
                         win_games += 1
                     elif result is False:
                         lose_games += 1
-            # the undeserving one goes first
+            # the 'undeserving one' goes first
             else:
                 if not toss_result:
-                    result = user_game()
+                    result = user_game(size)
                     if result:
                         win_games += 1
                     elif result is False:
                         lose_games += 1
                         break
                 else:
-                    result = comp_game()
+                    result = comp_game(size)
                     if result:
                         win_games += 1
                     elif result is False:
