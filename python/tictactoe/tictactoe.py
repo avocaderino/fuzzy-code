@@ -87,11 +87,11 @@ def best_play(open_boxes, cross_boxes, circle_boxes):
         if not try_win(cross_boxes, open_boxes):
             if 'mc' in open_boxes:
                 first_moves = open_box_names
-                for _ in range(10):
+                for _ in range(15):
                     first_moves.append('mc')
                 return random.choice(first_moves)
 
-            # evil mode commented out, else the  user might cry
+            # comment out for evil mode, you might regret it.
 
             # if 'mc' not in open_box_names and len(circle_boxes) < 2:
             #     corners = ['tl', 'tr', 'bl', 'br']
