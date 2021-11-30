@@ -271,7 +271,7 @@ def series(size=600):
                 sys.exit()
 
         print(f'\nGame {chance}\n______\n')
-        
+
         # toss winner gets to start first for the first game, then
         # it alternates
         if chance % 2 == 1:
