@@ -297,7 +297,6 @@ def series(size=600):
                     win_games += 1
                 elif result is False:
                     lose_games += 1
-                    break
             else:
                 result = comp_game(size)
                 if result:
