@@ -261,51 +261,48 @@ def series(size=600):
     toss_result = toss()
 
     for chance in range(1, games + 1):
-        skip = input('\nShall we continue?(yes/NO/stop): ').lower()
-        print('')
-        # the user is tired ig
-        if skip == 'stop':
-            sys.exit()
-        # let the user marvel at his win
-        while'y' not in skip:
-            skip = input('Are you ready now?(yes/NO/stop): ').lower()
-            print('')
-            if skip == 'stop':
-                sys.exit()
-        # the user is ready to play
-        else:
-            print(f'\nGame {chance}\n______\n')
 
-            # toss winner gets to start first for the first game, then
-            # it alternates
-            if chance % 2 == 1:
-                if toss_result:
-                    result = user_game(size)
-                    if result:
-                        win_games += 1
-                    elif result is False:
-                        lose_games += 1
-                else:
-                    result = comp_game(size)
-                    if result:
-                        win_games += 1
-                    elif result is False:
-                        lose_games += 1
-            # the 'undeserving one' goes first
+        # the user may be tired of this shit
+        if chance >= 2:
+            skip = input('\nDo you want to stop playing?(y/N): ').lower()
+            print('')
+            # the user is tired ig
+            if 'y' in skip:
+                sys.exit()
+
+        print(f'\nGame {chance}\n______\n')
+        
+        # toss winner gets to start first for the first game, then
+        # it alternates
+        if chance % 2 == 1:
+            if toss_result:
+                result = user_game(size)
+                if result:
+                    win_games += 1
+                elif result is False:
+                    lose_games += 1
             else:
-                if not toss_result:
-                    result = user_game(size)
-                    if result:
-                        win_games += 1
-                    elif result is False:
-                        lose_games += 1
-                        break
-                else:
-                    result = comp_game(size)
-                    if result:
-                        win_games += 1
-                    elif result is False:
-                        lose_games += 1
+                result = comp_game(size)
+                if result:
+                    win_games += 1
+                elif result is False:
+                    lose_games += 1
+
+        # the 'undeserving one' goes first
+        else:
+            if not toss_result:
+                result = user_game(size)
+                if result:
+                    win_games += 1
+                elif result is False:
+                    lose_games += 1
+                    break
+            else:
+                result = comp_game(size)
+                if result:
+                    win_games += 1
+                elif result is False:
+                    lose_games += 1
 
     # the series is over
     print('_'*79 + '\n\nPlease close the turtle window when you\'re done\n')
