@@ -20,10 +20,10 @@ def go_home():
 def l_part(length, direction):
     """
     Draws the basic structural unit of a grid shaped like the
-    letter 'L'
+    letter "L"
     """
     manu.forward(length)
-    if direction == 'left':
+    if direction == "left":
         manu.left(90)
     else:
         manu.right(90)
@@ -32,11 +32,11 @@ def l_part(length, direction):
 
 def part_grid(length):  # draws three columns
     """Draws three columns or rows"""
-    l_part(length, 'right')
+    l_part(length, "right")
     manu.right(90)
-    l_part(length, 'left')
+    l_part(length, "left")
     manu.left(90)
-    l_part(length, 'right')
+    l_part(length, "right")
     manu.right(90)
     manu.forward(length)
 
@@ -73,21 +73,21 @@ def box_mark_cross(pos, size, grid_length):
     go_home()
     # drawing a cross
     # specifying the y coordinate
-    if 't' in list(pos):
+    if "t" in list(pos):
         y_coord = grid_length/3-size/(2*math.sqrt(2))
-    elif 'm' in list(pos):
+    elif "m" in list(pos):
         y_coord = -size/(2*math.sqrt(2))
-    elif 'b' in list(pos):
+    elif "b" in list(pos):
         y_coord = -grid_length/3-size/(2*math.sqrt(2))
     else:
         raise ValueError
 
     # specifying the x coordinate
-    if 'l' in list(pos):
+    if "l" in list(pos):
         x_coord = -grid_length/3-size/(2*math.sqrt(2))
-    elif 'c' in list(pos):
+    elif "c" in list(pos):
         x_coord = -size/(2*math.sqrt(2))
-    elif 'r' in list(pos):
+    elif "r" in list(pos):
         x_coord = grid_length/3-size/(2*math.sqrt(2))
     else:
         raise ValueError
@@ -103,21 +103,21 @@ def box_mark_circle(pos, size, grid_length):
     # drawing a circle
     rad = size/2.2
     # specifying the y coordinate
-    if 't' in list(pos):
+    if "t" in list(pos):
         y_coord = grid_length/3
-    elif 'm' in list(pos):
+    elif "m" in list(pos):
         y_coord = 0
-    elif 'b' in list(pos):
+    elif "b" in list(pos):
         y_coord = -grid_length/3
     else:
         raise ValueError
 
     # specifying the x coordinate
-    if 'l' in list(pos):
+    if "l" in list(pos):
         x_coord = -grid_length/3 + rad
-    elif 'c' in list(pos):
+    elif "c" in list(pos):
         x_coord = rad
-    elif 'r' in list(pos):
+    elif "r" in list(pos):
         x_coord = grid_length/3 + rad
     else:
         raise ValueError
