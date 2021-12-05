@@ -23,12 +23,13 @@ def check_win(check_boxes):
             for x_coord_3, y_coord_3 in coords_2:
                 # checking if the points are collinear
                 if (
-                    x_coord_1*(y_coord_2 - y_coord_3)
-                    + x_coord_2*(y_coord_3 - y_coord_1)
-                    + x_coord_3*(y_coord_1 - y_coord_2) == 0
+                    x_coord_1 * (y_coord_2 - y_coord_3)
+                    + x_coord_2 * (y_coord_3 - y_coord_1)
+                    + x_coord_3 * (y_coord_1 - y_coord_2)
+                    == 0
                 ):
                     return True
-    # what else do you want me to do?
+                # what else do you want me to do?
     return False
 
 
@@ -58,13 +59,13 @@ def try_win(check_boxes, open_boxes):
         for x_coord_2, y_coord_2 in coords_1:
             # checking if there is an open box between two marked
             # boxes forming a line
-            midpoint = ((x_coord_1 + x_coord_2)/2, (y_coord_1 + y_coord_2)/2)
+            midpoint = ((x_coord_1 + x_coord_2) / 2, (y_coord_1 + y_coord_2) / 2)
             values = list(open_boxes.values())
 
             # no such box, now checking for open boxes beyond two
             # marked boxes forming a line
             if midpoint not in values:
-                extpoint = (2*x_coord_1 - x_coord_2, 2*y_coord_1 - y_coord_2)
+                extpoint = (2 * x_coord_1 - x_coord_2, 2 * y_coord_1 - y_coord_2)
 
                 # box is present beyond two boxes
                 if extpoint in values:
@@ -110,28 +111,36 @@ def user_game(size=600):
     """The user goes first, he is scared of a challenge smh"""
     # creating a grid
     grid(size)
-    mark_size = 30 + 7*size/50
+    mark_size = 30 + 7 * size / 50
     # the unmarked boxes
     open_boxes = {
-        "tl": (-1, 1), "tc": (0, 1), "tr": (1, 1),
-        "ml": (-1, 0),  "mc": (0, 0), "mr": (1, 0),
-        "bl": (-1, -1), "bc": (0, -1), "br": (1, -1)
+        "tl": (-1, 1),
+        "tc": (0, 1),
+        "tr": (1, 1),
+        "ml": (-1, 0),
+        "mc": (0, 0),
+        "mr": (1, 0),
+        "bl": (-1, -1),
+        "bc": (0, -1),
+        "br": (1, -1),
     }
     # the boxes with circles and crosses respectively
     circle_boxes, cross_boxes = [], []
     # the names of the boxes with crosses and boxes with circles
     cross_box_names, circle_box_names = [], []
     # spitting fax
-    HOTEL = "trivago"
+    hotel = "trivago"
 
     # boxes are not over, so continue the game
     while cont(open_boxes, cross_boxes, circle_boxes):
         # obviously,
-        while HOTEL == "trivago":
+        while hotel == "trivago":
             open_box_names = list(open_boxes.keys())
             # user input
-            cross = input("where do you want to put your mark? "
-                          f"The unmarked boxes are {open_box_names}\n").lower()
+            cross = input(
+                "where do you want to put your mark? "
+                f"The unmarked boxes are {open_box_names}\n"
+            ).lower()
             # valid input, cross the box
             if cross in open_boxes:
                 box_mark_cross(cross, mark_size, size)
@@ -141,9 +150,9 @@ def user_game(size=600):
                 cross_box_names.append(cross)
                 break
             # box is already marked
-            elif cross in cross_box_names or cross in circle_box_names:
+            if cross in cross_box_names or cross in circle_box_names:
                 print("The box has already been marked")
-            # or the user provided an invalid input
+                # or the user provided an invalid input
             else:
                 print("Invalid response")
 
@@ -167,19 +176,25 @@ def user_game(size=600):
         return True
     # match is drawn
     print(open_boxes)
-    print("It\"s a draw!")
+    print('It"s a draw!')
 
 
 def comp_game(size=600):
     """The computer gets to start first, the user has some guts"""
     # creating a grid
     grid(size)
-    mark_size = 30 + 7*size/50
+    mark_size = 30 + 7 * size / 50
     # the unmarked boxes
     open_boxes = {
-        "tl": (-1, 1), "tc": (0, 1), "tr": (1, 1),
-        "ml": (-1, 0),  "mc": (0, 0), "mr": (1, 0),
-        "bl": (-1, -1), "bc": (0, -1), "br": (1, -1)
+        "tl": (-1, 1),
+        "tc": (0, 1),
+        "tr": (1, 1),
+        "ml": (-1, 0),
+        "mc": (0, 0),
+        "mr": (1, 0),
+        "bl": (-1, -1),
+        "bc": (0, -1),
+        "br": (1, -1),
     }
     # the boxes with circles and crosses respectively
     circle_boxes, cross_boxes = [], []
@@ -198,8 +213,9 @@ def comp_game(size=600):
 
         # if boxes are left, asks the user which box to cross
         while cont(open_boxes, cross_boxes, circle_boxes):
-            cross = input("where do you want to put your mark? "
-                          f"{open_box_names}\n").lower()
+            cross = input(
+                "where do you want to put your mark? " f"{open_box_names}\n"
+            ).lower()
             # valid input, cross the box
             if cross in open_boxes:
                 box_mark_cross(cross, mark_size, size)
@@ -211,7 +227,7 @@ def comp_game(size=600):
             # box is already marked
             if cross in cross_box_names or cross in circle_box_names:
                 print("The box has already been marked")
-            # or the user provided an invalid input
+                # or the user provided an invalid input
             else:
                 print("Invalid response")
 
@@ -224,42 +240,50 @@ def comp_game(size=600):
         print("You win!")
         return True
     # match is drawn
-    print("It\"s a draw!")
-
-
-def series_result(win_games, lose_games):
-    """Determine the result of a series"""
-    if win_games > lose_games:
-        print(f"You have won the series {win_games} - {lose_games} !")
-    elif lose_games > win_games:
-        # the user is somehow dumber than me!
-        print(f"You have lost the series {win_games} - {lose_games} !")
-    else:
-        print(f"The series has ended in a draw {win_games} - {lose_games} !")
+    print('It"s a draw!')
 
 
 def toss():
     """Toss a coin and return the  result"""
     side = input("\nHeads or tails?: ").lower()
     prob_sides = ["heads", "tails"]
-    toss = random.choice(prob_sides)
-    result = side[0] == toss[0]
+    coin = random.choice(prob_sides)
+    result = side[0] == coin[0]
     # the user wins the toss, lucky man
     if result:
         print(f"The coin landed on {toss}! You have won the toss")
-    # the computer wins the toss
+        # the computer wins the toss
     else:
         print(f"The coin landed on {toss}! Better luck next time")
     return result
 
 
+def series_result(results):
+    """Determine the result of a series"""
+    win_games = lose_games = 0
+    for result in results:
+        if result:
+            win_games += 1
+        elif not result:
+            lose_games += 1
+
+    if win_games > lose_games:
+        # well done, my fren
+        return f"You have won the series {win_games} - {lose_games} !"
+    if lose_games > win_games:
+        # the user is somehow dumber than me!
+        return f"You have lost the series {win_games} - {lose_games} !"
+
+    return f"The series has ended in a draw {win_games} - {lose_games} !"
+
+
 def series(size=600):
     """Play a series of tictactoe games"""
-    print("\n Tictactoe \n" + "_"*11 + "\n")
+    print("\n Tictactoe \n" + "_" * 11 + "\n")
     games = int(input("How many games do you want to play?: "))
     # alternates between who gets to start first
-    win_games = lose_games = 0
     toss_result = toss()
+    results = []
 
     for chance in range(1, games + 1):
 
@@ -277,37 +301,22 @@ def series(size=600):
         # it alternates
         if chance % 2 == 1:
             if toss_result:
-                result = user_game(size)
-                if result:
-                    win_games += 1
-                elif result is False:
-                    lose_games += 1
+                results.append(user_game(size))
             else:
-                result = comp_game(size)
-                if result:
-                    win_games += 1
-                elif result is False:
-                    lose_games += 1
+                results.append(comp_game(size))
 
         # the "undeserving one" goes first
         else:
             if not toss_result:
-                result = user_game(size)
-                if result:
-                    win_games += 1
-                elif result is False:
-                    lose_games += 1
+                results.append(user_game(size))
+
             else:
-                result = comp_game(size)
-                if result:
-                    win_games += 1
-                elif result is False:
-                    lose_games += 1
+                results.append(comp_game(size))
 
     # the series is over
-    print("_"*79 + "\n\nPlease close the turtle window when you\"re done\n")
-    turtle.mainloop()
-    series_result(win_games, lose_games)
+    print("_" * 79 + '\n\nPlease close the turtle window when you"re done\n')
+    turtle.done()
+    series_result(results)
 
 
 series()
