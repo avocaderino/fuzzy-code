@@ -139,7 +139,7 @@ def user_game(size=600):
             # user input
             cross = input(
                 "where do you want to put your mark? "
-                f"The unmarked boxes are {open_box_names}\n"
+                f"The unmarked boxes are {open_box_names} \n"
             ).lower()
             # valid input, cross the box
             if cross in open_boxes:
@@ -214,7 +214,7 @@ def comp_game(size=600):
         # if boxes are left, asks the user which box to cross
         while cont(open_boxes, cross_boxes, circle_boxes):
             cross = input(
-                "where do you want to put your mark? " f"{open_box_names}\n"
+                "where do you want to put your mark? " f"{open_box_names} \n"
             ).lower()
             # valid input, cross the box
             if cross in open_boxes:
@@ -245,7 +245,7 @@ def comp_game(size=600):
 
 def toss():
     """Toss a coin and return the  result"""
-    side = input("\nHeads or tails?: ").lower()
+    side = input(" \nHeads or tails?: ").lower()
     prob_sides = ["heads", "tails"]
     coin = random.choice(prob_sides)
     result = side[0] == coin[0]
@@ -279,7 +279,7 @@ def series_result(results):
 
 def series(size=600):
     """Play a series of tictactoe games"""
-    print("\n Tictactoe \n" + "_" * 11 + "\n")
+    print(" \n Tictactoe  \n" + "_" * 11 + " \n")
     games = int(input("How many games do you want to play?: "))
     # alternates between who gets to start first
     toss_result = toss()
@@ -289,13 +289,13 @@ def series(size=600):
 
         # the user may be tired of this shit
         if chance >= 2:
-            skip = input("\nDo you want to stop playing?(y/N): ").lower()
+            skip = input(" \nDo you want to stop playing?(y/N): ").lower()
             print("")
             # the user is tired ig
             if "y" in skip:
                 sys.exit()
 
-        print(f"\nGame {chance}\n______\n")
+        print(f" \nGame {chance} \n______ \n")
 
         # toss winner gets to start first for the first game, then
         # it alternates
@@ -314,7 +314,7 @@ def series(size=600):
                 results.append(comp_game(size))
 
     # the series is over
-    print("_" * 79 + '\n\nPlease close the turtle window when you"re done\n')
+    print("_" * 79 + ' \n \nPlease close the turtle window when you"re done. \n')
     turtle.done()
     series_result(results)
 
