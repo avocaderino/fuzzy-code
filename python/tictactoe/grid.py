@@ -18,16 +18,14 @@ def go_home():
 
 
 def l_part(length, direction):
-    """
-    Draws the basic structural unit of a grid shaped like the
-    letter "L"
-    """
+    """Draws the basic structural unit of a grid shaped like the
+    letter L"""
     manu.forward(length)
     if direction == "left":
         manu.left(90)
     else:
         manu.right(90)
-        manu.forward(length / 3)
+    manu.forward(length / 3)
 
 
 def part_grid(length):

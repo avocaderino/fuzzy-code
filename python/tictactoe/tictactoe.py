@@ -251,10 +251,10 @@ def toss():
     result = side[0] == coin[0]
     # the user wins the toss, lucky man
     if result:
-        print(f"The coin landed on {toss}! You have won the toss")
+        print(f"The coin landed on {coin}! You have won the toss")
         # the computer wins the toss
     else:
-        print(f"The coin landed on {toss}! Better luck next time")
+        print(f"The coin landed on {coin}! Better luck next time")
     return result
 
 
@@ -280,7 +280,10 @@ def series_result(results):
 def series(size=600):
     """Play a series of tictactoe games"""
     print(" \n Tictactoe  \n" + "_" * 11 + " \n")
-    games = int(input("How many games do you want to play?: "))
+    try:
+        games = int(input("How many games do you want to play?: "))
+    except ValueError:
+        games = int(input("Please enter a number: "))
     # alternates between who gets to start first
     toss_result = toss()
     results = []
@@ -316,7 +319,7 @@ def series(size=600):
     # the series is over
     print("_" * 79 + ' \n \nPlease close the turtle window when you"re done. \n')
     turtle.done()
-    series_result(results)
+    print(series_result(results) + "\n")
 
 
 series()
