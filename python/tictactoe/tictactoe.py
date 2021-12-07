@@ -1,4 +1,4 @@
-"""Let"s play some tictactoe!"""
+"""Let's play some tictactoe!"""
 import random
 import sys
 import turtle
@@ -6,7 +6,7 @@ from grid import grid, box_mark_cross, box_mark_circle
 
 
 def check_win(check1):
-    """Check1 if a side has won"""
+    """Check if a side has won"""
     # choosing coordinates of three boxes
     if check1 and len(check1) >= 3:
 
@@ -43,8 +43,7 @@ def cont(opens, crosses, circles):
 
 
 def best_play(opens, crosses, circles):
-    """Returns the computer"s move"""
-
+    """Returns the computer's best move"""
     for i in list(opens.values()):
         circle_i = list(circles.values())
         circle_i.append(i)  # check if marking i will result in a win
@@ -77,11 +76,11 @@ def best_play(opens, crosses, circles):
 
 
 def user_game(size=600):
-    """The user goes first, he is scared of a challenge smh"""
+    """The user goes first, he is scared of a challenge"""
     # creating a grid
     grid(size)
     mark_size = 30 + 7 * size / 50
-    # saw this idea with magic squares on reddit, the bloke wrote an entire
+    # saw this idea with magic squares on reddit, dude wrote an entire
     # Tic-Tac-Toe game in ~20 lines, while I'm trying to shorten mine to 350 smh.
     opens = {
         "tl": 2,
@@ -122,7 +121,7 @@ def user_game(size=600):
             else:
                 print("Invalid response")
 
-        # computer"s turn
+        # computer's turn
         if cont(opens, crosses, circles):
             circle = best_play(opens, crosses, circles)
             print(f"The computer marked {circle}.")
@@ -139,7 +138,7 @@ def user_game(size=600):
         print("You win!")
         return True
     # match is drawn
-    print('It"s a draw!')
+    print("It's a draw!")
 
 
 def comp_game(size=600):
@@ -196,7 +195,7 @@ def comp_game(size=600):
         print("You win!")
         return True
     # match is drawn
-    print('It"s a draw!')
+    print("It's a draw!")
 
 
 def toss():
@@ -273,7 +272,7 @@ def series(size=600):
                 results.append(comp_game(size))
 
     # the series is over
-    print("_" * 79 + ' \n \nPlease close the turtle window when you"re done. \n')
+    print("_" * 79 + " \n \nPlease close the turtle window when you're done. \n")
     turtle.done()
     print(series_result(results) + "\n")
 
