@@ -5,22 +5,22 @@ import turtle
 from grid import grid, box_mark_cross, box_mark_circle
 
 
-def check_win(check1):
+def check_win(check_box):
     """Check if a side has won"""
     # choosing coordinates of three boxes
-    if check1 and len(check1) >= 3:
+    if check_box and len(check_box) >= 3:
 
-        for box1 in check1:
-            check12 = []
-            for i in check1:
+        for box1 in check_box:
+            check2 = []
+            for i in check_box:
                 if i != box1:
-                    check12.append(i)
-            for box2 in check12:
-                check13 = []
-                for j in check12:
+                    check2.append(i)
+            for box2 in check2:
+                check3 = []
+                for j in check2:
                     if j != box2:
-                        check13.append(j)
-                for box3 in check13:
+                        check3.append(j)
+                for box3 in check3:
                     if box1 + box2 + box3 == 15:
                         return True
         # what else do you want me to do?
