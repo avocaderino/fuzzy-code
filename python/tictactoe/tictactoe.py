@@ -5,106 +5,75 @@ import turtle
 from grid import grid, box_mark_cross, box_mark_circle
 
 
-def check_win(check_boxes):
-    """Check if a side has won"""
+def check_win(check1):
+    """Check1 if a side has won"""
     # choosing coordinates of three boxes
-    for x_coord_1, y_coord_1 in check_boxes:
-        coords_1 = []
-        for i in check_boxes:
-            if i != (x_coord_1, y_coord_1):
-                coords_1.append(i)
+    if check1 and len(check1) >= 3:
 
-        for x_coord_2, y_coord_2 in coords_1:
-            coords_2 = []
-            for j in coords_1:
-                if j != (x_coord_2, y_coord_2):
-                    coords_2.append(j)
+        for box1 in check1:
+            check12 = []
+            for i in check1:
+                if i != box1:
+                    check12.append(i)
+            for box2 in check12:
+                check13 = []
+                for j in check12:
+                    if j != box2:
+                        check13.append(j)
+                for box3 in check13:
+                    if box1 + box2 + box3 == 15:
+                        return True
+        # what else do you want me to do?
+        return False
 
-            for x_coord_3, y_coord_3 in coords_2:
-                # checking if the points are collinear
-                if (
-                    x_coord_1 * (y_coord_2 - y_coord_3)
-                    + x_coord_2 * (y_coord_3 - y_coord_1)
-                    + x_coord_3 * (y_coord_1 - y_coord_2)
-                    == 0
-                ):
-                    return True
-                # what else do you want me to do?
     return False
 
 
-def cont(open_boxes, cross_boxes, circle_boxes):
+def cont(opens, crosses, circles):
     """Decide whether to continue the game or not"""
     # only need to check if there are 3 or more of the same symbol
     # why is this condition being checked twice? idk, it"s not anymore
     # :)
-    while len(cross_boxes) > 2 or len(open_boxes) > 2:
-        if check_win(circle_boxes) or check_win(cross_boxes):
-            return False
-        if len(open_boxes) <= 0:
-            return False
-        return True
+    cross_box, circle_box = list(crosses.values()), list(circles.values())
+    if check_win(circle_box) or check_win(cross_box):
+        return False
+    if len(opens) <= 0:
+        return False
     return True
 
 
-def try_win(check_boxes, open_boxes):
-    """Checks for possible wins"""
-    open_box_names = list(open_boxes.keys())
-    for x_coord_1, y_coord_1 in check_boxes:
-        coords_1 = []
-        for i in check_boxes:
-            if i != (x_coord_1, y_coord_1):
-                coords_1.append(i)
-
-        for x_coord_2, y_coord_2 in coords_1:
-            # checking if there is an open box between two marked
-            # boxes forming a line
-            midpoint = ((x_coord_1 + x_coord_2) / 2, (y_coord_1 + y_coord_2) / 2)
-            values = list(open_boxes.values())
-
-            # no such box, now checking for open boxes beyond two
-            # marked boxes forming a line
-            if midpoint not in values:
-                extpoint = (2 * x_coord_1 - x_coord_2, 2 * y_coord_1 - y_coord_2)
-
-                # box is present beyond two boxes
-                if extpoint in values:
-                    index = values.index(extpoint)
-                    return open_box_names[index]
-
-            # box is present between two boxes
-            else:
-                index = values.index(midpoint)
-                return open_box_names[index]
-
-    # no boxes which can be marked to win the game
-    return False
-
-
-def best_play(open_boxes, cross_boxes, circle_boxes):
+def best_play(opens, crosses, circles):
     """Returns the computer"s move"""
-    open_box_names = list(open_boxes.keys())
-    while not try_win(circle_boxes, open_boxes):
-        if not try_win(cross_boxes, open_boxes):
-            if "mc" in open_boxes:
-                first_moves = open_box_names
-                for _ in range(15):
-                    first_moves.append("mc")
-                return random.choice(first_moves)
 
-            # comment out for evil mode, you might regret it.
+    for i in list(opens.values()):
+        circle_i = list(circles.values())
+        circle_i.append(i)  # check if marking i will result in a win
+        if check_win(circle_i):
+            return list(opens.keys())[list(opens.values()).index(i)]
 
-            # if "mc" not in open_box_names and len(circle_boxes) < 2:
-            #     corners = ["tl", "tr", "bl", "br"]
-            #     available_corners = []
-            #     for corner in corners:
-            #         if corner in open_box_names:
-            #             available_corners.append(corner)
-            #     return random.choice(available_corners)
+    for i in list(opens.values()):
+        cross_i = list(crosses.values())
+        cross_i.append(i)
+        if check_win(cross_i):
+            return list(opens.keys())[list(opens.values()).index(i)]
 
-            return random.choice(open_box_names)
-        return try_win(cross_boxes, open_boxes)
-    return try_win(circle_boxes, open_boxes)
+    if "mc" in opens:
+        first_moves = list(opens.keys())
+        for _ in range(15):  # now we don't want the user to get tired of losing, do we?
+            first_moves.append("mc")
+            return random.choice(first_moves)
+
+    # uncomment for evil mode
+
+    # if "mc" not in list(opens.keys()) and len(circles) < 2:
+    #     corners = ["tl", "tr", "bl", "br"]
+    #     available_corners = []
+    #     for corner in corners:
+    #         if corner in open_names:
+    #             available_corners.append(corner)
+    #     return random.choice(available_corners)
+
+    return random.choice(list(opens.keys()))
 
 
 def user_game(size=600):
@@ -112,70 +81,64 @@ def user_game(size=600):
     # creating a grid
     grid(size)
     mark_size = 30 + 7 * size / 50
-    # the unmarked boxes
-    open_boxes = {
-        "tl": (-1, 1),
-        "tc": (0, 1),
-        "tr": (1, 1),
-        "ml": (-1, 0),
-        "mc": (0, 0),
-        "mr": (1, 0),
-        "bl": (-1, -1),
-        "bc": (0, -1),
-        "br": (1, -1),
+    # saw this idea with magic squares on reddit, the bloke wrote an entire
+    # Tic-Tac-Toe game in ~20 lines, while I'm trying to shorten mine to 350 smh.
+    opens = {
+        "tl": 2,
+        "tc": 9,
+        "tr": 4,
+        "ml": 7,
+        "mc": 5,
+        "mr": 3,
+        "bl": 6,
+        "bc": 1,
+        "br": 8,
     }
     # the boxes with circles and crosses respectively
-    circle_boxes, cross_boxes = [], []
-    # the names of the boxes with crosses and boxes with circles
-    cross_box_names, circle_box_names = [], []
+    circles, crosses = {}, {}
     # spitting fax
     hotel = "trivago"
 
     # boxes are not over, so continue the game
-    while cont(open_boxes, cross_boxes, circle_boxes):
-        # obviously,
+    while cont(opens, crosses, circles):
+        # TODO find a way to eliminate this loop
+        # without this, if the user provides a wrong input, things get pretty bad
         while hotel == "trivago":
-            open_box_names = list(open_boxes.keys())
             # user input
             cross = input(
-                "where do you want to put your mark? "
-                f"The unmarked boxes are {open_box_names} \n"
+                "Where do you want to put your mark? "
+                f"The unmarked boxes are {list(opens.keys())} \n"
             ).lower()
             # valid input, cross the box
-            if cross in open_boxes:
+            if cross in opens:
                 box_mark_cross(cross, mark_size, size)
-                cross_boxes.append(open_boxes.get(cross))
-                del open_boxes[cross]
-                open_box_names = list(open_boxes.keys())
-                cross_box_names.append(cross)
+                crosses[cross] = opens.get(cross)
+                del opens[cross]
                 break
             # box is already marked
-            if cross in cross_box_names or cross in circle_box_names:
+            if cross in list(crosses.keys()) or cross in list((circles).keys()):
                 print("The box has already been marked")
                 # or the user provided an invalid input
             else:
                 print("Invalid response")
 
         # computer"s turn
-        if cont(open_boxes, cross_boxes, circle_boxes):
-            circle = best_play(open_boxes, cross_boxes, circle_boxes)
-            print(circle)
+        if cont(opens, crosses, circles):
+            circle = best_play(opens, crosses, circles)
+            print(f"The computer marked {circle}.")
             box_mark_circle(circle, mark_size, size)
-            circle_boxes.append(open_boxes.get(circle))
-            del open_boxes[circle]
-            open_box_names = list(open_boxes.keys())
-            circle_box_names.append(circle)
+            circles[circle] = opens.get(circle)
+            del opens[circle]
 
     # computer wins, the user is dogshit at tictactoe
-    if check_win(circle_boxes):
+    if check_win(list(circles.values())):
         print("I win!")
         return False
     # user wins
-    if check_win(cross_boxes):
+    if check_win(list(crosses.values())):
         print("You win!")
         return True
     # match is drawn
-    print(open_boxes)
     print('It"s a draw!')
 
 
@@ -184,59 +147,52 @@ def comp_game(size=600):
     # creating a grid
     grid(size)
     mark_size = 30 + 7 * size / 50
+    circles, crosses = {}, {}
     # the unmarked boxes
-    open_boxes = {
-        "tl": (-1, 1),
-        "tc": (0, 1),
-        "tr": (1, 1),
-        "ml": (-1, 0),
-        "mc": (0, 0),
-        "mr": (1, 0),
-        "bl": (-1, -1),
-        "bc": (0, -1),
-        "br": (1, -1),
+    opens = {
+        "tl": 2,
+        "tc": 9,
+        "tr": 4,
+        "ml": 7,
+        "mc": 5,
+        "mr": 3,
+        "bl": 6,
+        "bc": 1,
+        "br": 8,
     }
-    # the boxes with circles and crosses respectively
-    circle_boxes, cross_boxes = [], []
-    # the names of the boxes with crosses and boxes with circles
-    cross_box_names, circle_box_names = [], []
-
     # plays the best move
-    while cont(open_boxes, cross_boxes, circle_boxes):
-        circle = best_play(open_boxes, cross_boxes, circle_boxes)
-        print(circle)
+    while cont(opens, crosses, circles):
+        circle = best_play(opens, crosses, circles)
+        print(f"The computer marked {circle}.")
         box_mark_circle(circle, mark_size, size)
-        circle_boxes.append(open_boxes.get(circle))
-        del open_boxes[circle]
-        open_box_names = list(open_boxes.keys())
-        circle_box_names.append(circle)
+        circles[circle] = opens.get(circle)
+        del opens[circle]
 
         # if boxes are left, asks the user which box to cross
-        while cont(open_boxes, cross_boxes, circle_boxes):
+        while cont(opens, crosses, circles):
             cross = input(
-                "where do you want to put your mark? " f"{open_box_names} \n"
+                "Where do you want to put your mark? "
+                f"The unmarked boxes are {list(opens.keys())} \n"
             ).lower()
             # valid input, cross the box
-            if cross in open_boxes:
+            if cross in opens:
                 box_mark_cross(cross, mark_size, size)
-                cross_boxes.append(open_boxes.get(cross))
-                del open_boxes[cross]
-                open_box_names = list(open_boxes.keys())
-                cross_box_names.append(cross)
+                crosses[cross] = opens.get(cross)
+                del opens[cross]
                 break
             # box is already marked
-            if cross in cross_box_names or cross in circle_box_names:
+            if cross in list(crosses.keys()) or cross in list((circles).keys()):
                 print("The box has already been marked")
                 # or the user provided an invalid input
             else:
                 print("Invalid response")
 
     # computer wins, the user is meh. at tictactoe
-    if check_win(circle_boxes):
+    if check_win(list(circles.values())):
         print("I win!")
         return False
     # user wins
-    if check_win(cross_boxes):
+    if check_win(list(crosses.values())):
         print("You win!")
         return True
     # match is drawn
@@ -264,7 +220,7 @@ def series_result(results):
     for result in results:
         if result:
             win_games += 1
-        elif not result:
+        elif result is False:
             lose_games += 1
 
     if win_games > lose_games:
