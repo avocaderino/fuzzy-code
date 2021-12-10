@@ -58,7 +58,7 @@ def best_play(opens, crosses, circles):
 
     if "mc" in opens:
         first_moves = list(opens.keys())
-        for _ in range(15):  # now we don't want the user to get tired of losing, do we?
+        for _ in range(15):  # now we don't want the user to get tired of losing
             first_moves.append("mc")
             return random.choice(first_moves)
 
