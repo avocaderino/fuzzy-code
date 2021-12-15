@@ -152,6 +152,8 @@ def comp_game(size=600):
     }
 
     while cont(opens, crosses, circles):
+
+        # the computer plays..
         circle = best_play(opens, crosses, circles)
         print(f"The computer marked {circle}.")
         box_mark_circle(circle, mark_size, size)
