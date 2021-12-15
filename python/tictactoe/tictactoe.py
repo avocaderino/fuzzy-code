@@ -7,38 +7,38 @@ from grid import grid, box_mark_cross, box_mark_circle
 
 def check_win(check_box):
     """Check if a side has won"""
-    # choosing coordinates of three boxes
-    if check_box and len(check_box) >= 3:
-
-        for box1 in check_box:
-            check2 = []
-            for i in check_box:
-                if i != box1:
-                    check2.append(i)
-            for box2 in check2:
-                check3 = []
-                for j in check2:
-                    if j != box2:
-                        check3.append(j)
-                for box3 in check3:
-                    if box1 + box2 + box3 == 15:
-                        return True
-        # what else do you want me to do?
+    # By definition,
+    if check_box and len(check_box) < 3:
         return False
 
+    for box1 in check_box:
+        check2 = []
+        for i in check_box:
+            if i != box1:
+                check2.append(i)
+        for box2 in check2:
+            check3 = []
+            for j in check2:
+                if j != box2:
+                    check3.append(j)
+            for box3 in check3:
+                if box1 + box2 + box3 == 15:
+                    return True
+
+    # what else do you want me to do?
     return False
 
 
 def cont(opens, crosses, circles):
     """Decide whether to continue the game or not"""
-    # only need to check if there are 3 or more of the same symbol
-    # why is this condition being checked twice? idk, it"s not anymore
-    # :)
+    # sometimes I wonder if dictionaries are worth it
     cross_box, circle_box = list(crosses.values()), list(circles.values())
+
     if check_win(circle_box) or check_win(cross_box):
         return False
     if len(opens) <= 0:
         return False
+
     return True
 
 
@@ -77,11 +77,11 @@ def best_play(opens, crosses, circles):
 
 def user_game(size=600):
     """The user goes first, he is scared of a challenge"""
-    # creating a grid
     grid(size)
     mark_size = 30 + 7 * size / 50
+    circles, crosses = {}, {}
     # saw this idea with magic squares on reddit, dude wrote an entire
-    # Tic-Tac-Toe game in ~20 lines, while I'm trying to shorten mine to 350 smh.
+    # Tic-Tac-Toe game in ~20 lines, pretty impressive I must say.
     opens = {
         "tl": 2,
         "tc": 9,
@@ -93,47 +93,40 @@ def user_game(size=600):
         "bc": 1,
         "br": 8,
     }
-    # the boxes with circles and crosses respectively
-    circles, crosses = {}, {}
-    # spitting fax
-    hotel = "trivago"
 
-    # boxes are not over, so continue the game
     while cont(opens, crosses, circles):
-        # TODO find a way to eliminate this loop
-        # without this, if the user provides a wrong input, things get pretty bad
-        while hotel == "trivago":
-            # user input
-            cross = input(
-                "Where do you want to put your mark? "
-                f"The unmarked boxes are {list(opens.keys())} \n"
-            ).lower()
-            # valid input, cross the box
-            if cross in opens:
-                box_mark_cross(cross, mark_size, size)
-                crosses[cross] = opens.get(cross)
-                del opens[cross]
-                break
-            # box is already marked
-            if cross in list(crosses.keys()) or cross in list((circles).keys()):
-                print("The box has already been marked")
-                # or the user provided an invalid input
-            else:
-                print("Invalid response")
+        cross = input(
+            "Where do you want to put your mark? "
+            f"The unmarked boxes are {list(opens.keys())} \n"
+        ).lower()
 
-        # computer's turn
-        if cont(opens, crosses, circles):
+        # valid input, cross the box
+        if cross in opens:
+            box_mark_cross(cross, mark_size, size)
+            crosses[cross] = opens.get(cross)
+            del opens[cross]
+
+            # game over
+            if not cont(opens, crosses, circles):
+                break
+
+            # computer's turn
             circle = best_play(opens, crosses, circles)
             print(f"The computer marked {circle}.")
             box_mark_circle(circle, mark_size, size)
             circles[circle] = opens.get(circle)
             del opens[circle]
 
-    # computer wins, the user is dogshit at tictactoe
+        # box is already marked
+        elif cross in list(crosses.keys()) or cross in list((circles).keys()):
+            print("The box has already been marked")
+        # or the user provided an invalid input
+        else:
+            print("Invalid response")
+
     if check_win(list(circles.values())):
         print("I win!")
         return False
-    # user wins
     if check_win(list(crosses.values())):
         print("You win!")
         return True
@@ -143,11 +136,9 @@ def user_game(size=600):
 
 def comp_game(size=600):
     """The computer gets to start first, the user has some guts"""
-    # creating a grid
     grid(size)
     mark_size = 30 + 7 * size / 50
     circles, crosses = {}, {}
-    # the unmarked boxes
     opens = {
         "tl": 2,
         "tc": 9,
@@ -159,7 +150,7 @@ def comp_game(size=600):
         "bc": 1,
         "br": 8,
     }
-    # plays the best move
+
     while cont(opens, crosses, circles):
         circle = best_play(opens, crosses, circles)
         print(f"The computer marked {circle}.")
@@ -167,30 +158,27 @@ def comp_game(size=600):
         circles[circle] = opens.get(circle)
         del opens[circle]
 
-        # if boxes are left, asks the user which box to cross
+        # another loop so the game won't stop if the use makes a mistake
         while cont(opens, crosses, circles):
             cross = input(
                 "Where do you want to put your mark? "
                 f"The unmarked boxes are {list(opens.keys())} \n"
             ).lower()
-            # valid input, cross the box
+
             if cross in opens:
                 box_mark_cross(cross, mark_size, size)
                 crosses[cross] = opens.get(cross)
                 del opens[cross]
                 break
-            # box is already marked
+            # invalid responses
             if cross in list(crosses.keys()) or cross in list((circles).keys()):
                 print("The box has already been marked")
-                # or the user provided an invalid input
             else:
                 print("Invalid response")
 
-    # computer wins, the user is meh. at tictactoe
     if check_win(list(circles.values())):
         print("I win!")
         return False
-    # user wins
     if check_win(list(crosses.values())):
         print("You win!")
         return True
@@ -210,6 +198,7 @@ def toss():
         # the computer wins the toss
     else:
         print(f"The coin landed on {coin}! Better luck next time")
+
     return result
 
 
@@ -272,7 +261,7 @@ def series(size=600):
                 results.append(comp_game(size))
 
     # the series is over
-    print("_" * 79 + " \n \nPlease close the turtle window when you're done. \n")
+    print("_" * 79 + " \n \nPlease close the game window to view the results. \n")
     turtle.done()
     print(series_result(results) + "\n")
 
