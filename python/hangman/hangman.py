@@ -34,10 +34,10 @@ def hangman(lives=7):
         # playing the game
         guessed_letter = input(
             f"\n{unguessed_letters} more letter(s) to go and you "
-            f"have {lives} lives/life left. Press a letter\n").upper()
+            f"have {lives} lives/life left. Press a letter\n"
+        ).upper()
 
-        if (guessed_letter not in used_letters and
-                guessed_letter in available_letters):
+        if guessed_letter not in used_letters and guessed_letter in available_letters:
             # checking how many times the letter occurs in the word
             while guessed_letter in actual_letters:
                 num_letters += 1
@@ -48,8 +48,7 @@ def hangman(lives=7):
                 lives -= 1
             else:
                 # the letter is in the word
-                print(f"The letter is present {num_letters} "
-                      "times in the word")
+                print(f"The letter is present {num_letters} " "times in the word")
                 unguessed_letters -= num_letters
                 letters_in_word.append(guessed_letter)
             used_letters.append(guessed_letter)
@@ -58,7 +57,8 @@ def hangman(lives=7):
         elif guessed_letter in used_letters:
             print(
                 "You have already guessed this letter once. "
-                "Please choose another letter")
+                "Please choose another letter"
+            )
         # input is not a letter
         elif guessed_letter not in used_letters or available_letters:
             print("Letters only please")
@@ -70,7 +70,8 @@ def hangman(lives=7):
     else:
         print(
             f"You have defeated me with {lives} lives remaining. Enjoy this "
-            f"victory while it lasts. I will be back.\nThe word was {word}")
+            f"victory while it lasts. I will be back.\nThe word was {word}"
+        )
 
 
 hangman()

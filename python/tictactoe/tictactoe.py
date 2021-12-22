@@ -97,7 +97,7 @@ def user_game(size=600):
     while cont(opens, crosses, circles):
         cross = input(
             "Where do you want to put your mark? "
-            f"The unmarked boxes are {list(opens.keys())} \n"
+            f"The open boxes are {list(opens.keys())} \n"
         ).lower()
 
         # valid input, cross the box
@@ -116,6 +116,7 @@ def user_game(size=600):
             box_mark_circle(circle, mark_size, size)
             circles[circle] = opens.get(circle)
             del opens[circle]
+            print("")
 
         # box is already marked
         elif cross in list(crosses.keys()) or cross in list((circles).keys()):
@@ -164,13 +165,14 @@ def comp_game(size=600):
         while cont(opens, crosses, circles):
             cross = input(
                 "Where do you want to put your mark? "
-                f"The unmarked boxes are {list(opens.keys())} \n"
+                f"The open boxes are {list(opens.keys())} \n"
             ).lower()
 
             if cross in opens:
                 box_mark_cross(cross, mark_size, size)
                 crosses[cross] = opens.get(cross)
                 del opens[cross]
+                print("")
                 break
             # invalid responses
             if cross in list(crosses.keys()) or cross in list((circles).keys()):
@@ -208,7 +210,7 @@ def series_result(results):
     """Determine the result of a series"""
     win_games = lose_games = 0
     for result in results:
-        if result:
+        if result is True:
             win_games += 1
         elif result is False:
             lose_games += 1
