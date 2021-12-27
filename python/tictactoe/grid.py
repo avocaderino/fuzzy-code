@@ -69,57 +69,43 @@ def cross(size):
 def box_mark_cross(pos, size, grid_length):
     """Crosses out a box on the grid"""
     go_home()
-    # drawing a cross
-    # specifying the y coordinate
-    if "t" in list(pos):
-        y_coord = grid_length / 3 - size / (2 * math.sqrt(2))
-    elif "m" in list(pos):
-        y_coord = -size / (2 * math.sqrt(2))
-    elif "b" in list(pos):
-        y_coord = -grid_length / 3 - size / (2 * math.sqrt(2))
-    else:
-        raise ValueError
 
-    # specifying the x coordinate
-    if "l" in list(pos):
-        x_coord = -grid_length / 3 - size / (2 * math.sqrt(2))
-    elif "c" in list(pos):
-        x_coord = -size / (2 * math.sqrt(2))
-    elif "r" in list(pos):
-        x_coord = grid_length / 3 - size / (2 * math.sqrt(2))
-    else:
-        raise ValueError
+    coords = {-grid_length / 3: ["l", "b"], 0: ["c", "m"], grid_length / 3: ["r", "t"]}
+    x_coords = [coord[0] for coord in list(coords.values())]
+    y_coords = [coord[1] for coord in list(coords.values())]
+
+    for i in pos:
+        if i in x_coords:
+            x_coord = list(coords.keys())[x_coords.index(i)] - size / (2 * math.sqrt(2))
+        elif i in y_coords:
+            y_coord = list(coords.keys())[y_coords.index(i)] - size / (2 * math.sqrt(2))
+
     # drawing
-    manu.goto(x_coord, y_coord)
-    manu.pendown()
-    cross(size)
+    try:
+        manu.goto(x_coord, y_coord)
+        manu.pendown()
+        cross(size)
+    except UnboundLocalError:
+        print("Wrong input")
 
 
 def box_mark_circle(pos, size, grid_length):
     """Circles a box on the grid"""
     go_home()
-    # drawing a circle
-    rad = size / 2.2
-    # specifying the y coordinate
-    if "t" in list(pos):
-        y_coord = grid_length / 3
-    elif "m" in list(pos):
-        y_coord = 0
-    elif "b" in list(pos):
-        y_coord = -grid_length / 3
-    else:
-        raise ValueError
 
-    # specifying the x coordinate
-    if "l" in list(pos):
-        x_coord = -grid_length / 3 + rad
-    elif "c" in list(pos):
-        x_coord = rad
-    elif "r" in list(pos):
-        x_coord = grid_length / 3 + rad
-    else:
-        raise ValueError
-    # drawing
-    manu.goto(x_coord, y_coord)
-    manu.pendown()
-    manu.circle(rad)
+    coords = {-grid_length / 3: ["l", "b"], 0: ["c", "m"], grid_length / 3: ["r", "t"]}
+    x_coords = [coord[0] for coord in list(coords.values())]
+    y_coords = [coord[1] for coord in list(coords.values())]
+
+    for i in pos:
+        if i in x_coords:
+            x_coord = list(coords.keys())[x_coords.index(i)] + size / 2.2
+        elif i in y_coords:
+            y_coord = list(coords.keys())[y_coords.index(i)]
+
+    try:
+        manu.goto(x_coord, y_coord)
+        manu.pendown()
+        manu.circle(size / 2.2)
+    except UnboundLocalError:
+        print("Wrong input")
