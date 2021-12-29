@@ -70,15 +70,16 @@ def box_mark_cross(pos, size, grid_length):
     """Crosses out a box on the grid"""
     go_home()
 
-    coords = {-grid_length / 3: ["l", "b"], 0: ["c", "m"], grid_length / 3: ["r", "t"]}
+    coords = {-grid_length: ["l", "b"], 0: ["c", "m"], grid_length: ["r", "t"]}
     x_coords = [coord[0] for coord in list(coords.values())]
     y_coords = [coord[1] for coord in list(coords.values())]
+    terms = list(coords.keys())
 
     for i in pos:
         if i in x_coords:
-            x_coord = list(coords.keys())[x_coords.index(i)] - size / (2 * math.sqrt(2))
+            x_coord = terms[x_coords.index(i)] / 3 - size / (2 * math.sqrt(2))
         elif i in y_coords:
-            y_coord = list(coords.keys())[y_coords.index(i)] - size / (2 * math.sqrt(2))
+            y_coord = terms[y_coords.index(i)] / 3 - size / (2 * math.sqrt(2))
 
     # drawing
     try:
@@ -93,15 +94,16 @@ def box_mark_circle(pos, size, grid_length):
     """Circles a box on the grid"""
     go_home()
 
-    coords = {-grid_length / 3: ["l", "b"], 0: ["c", "m"], grid_length / 3: ["r", "t"]}
+    coords = {-grid_length: ["l", "b"], 0: ["c", "m"], grid_length: ["r", "t"]}
     x_coords = [coord[0] for coord in list(coords.values())]
     y_coords = [coord[1] for coord in list(coords.values())]
+    terms = list(coords.keys())
 
     for i in pos:
         if i in x_coords:
-            x_coord = list(coords.keys())[x_coords.index(i)] + size / 2.2
+            x_coord = terms[x_coords.index(i)] / 3 + size / 2.2
         elif i in y_coords:
-            y_coord = list(coords.keys())[y_coords.index(i)]
+            y_coord = terms[y_coords.index(i)] / 3
 
     try:
         manu.goto(x_coord, y_coord)
@@ -109,3 +111,4 @@ def box_mark_circle(pos, size, grid_length):
         manu.circle(size / 2.2)
     except UnboundLocalError:
         print("Wrong input")
+

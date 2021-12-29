@@ -5,6 +5,9 @@ import turtle
 from grid import grid, box_mark_cross, box_mark_circle
 
 
+CONST_BOXES = {"tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"}
+
+
 def check_win(check_box):
     """Check if a side has won"""
     # By definition,
@@ -12,15 +15,9 @@ def check_win(check_box):
         return False
 
     for box1 in check_box:
-        check2 = []
-        for i in check_box:
-            if i != box1:
-                check2.append(i)
+        check2 = [box for box in check_box if box != box1]
         for box2 in check2:
-            check3 = []
-            for j in check2:
-                if j != box2:
-                    check3.append(j)
+            check3 = [box for box in check2 if box != box2]
             for box3 in check3:
                 if box1 + box2 + box3 == 15:
                     return True
@@ -44,35 +41,32 @@ def cont(opens, crosses, circles):
 
 def best_play(opens, crosses, circles):
     """Returns the computer's best move"""
+    open_names = list(opens.keys())
+
     for i in list(opens.values()):
         circle_i = list(circles.values())
         circle_i.append(i)  # check if marking i will result in a win
         if check_win(circle_i):
-            return list(opens.keys())[list(opens.values()).index(i)]
+            return open_names[list(opens.values()).index(i)]
 
     for i in list(opens.values()):
         cross_i = list(crosses.values())
         cross_i.append(i)
         if check_win(cross_i):
-            return list(opens.keys())[list(opens.values()).index(i)]
+            return open_names[list(opens.values()).index(i)]
 
     if "mc" in opens:
-        first_moves = list(opens.keys())
-        for _ in range(15):  # now we don't want the user to get depressed
-            first_moves.append("mc")
-            return random.choice(first_moves)
+        first_moves = open_names + [ "mc" for _ in range(15)]
+        return random.choice(first_moves)
 
     # uncomment for evil mode
 
-    # if "mc" not in list(opens.keys()) and len(circles) < 2:
+    # if "mc" not in open_names and len(circles) < 2:
     #     corners = ["tl", "tr", "bl", "br"]
-    #     available_corners = []
-    #     for corner in corners:
-    #         if corner in open_names:
-    #             available_corners.append(corner)
+    #     available_corners = [corner in open_names for corner in corners]
     #     return random.choice(available_corners)
 
-    return random.choice(list(opens.keys()))
+    return random.choice(open_names)
 
 
 def user_game(size=600):
@@ -99,6 +93,8 @@ def user_game(size=600):
             "Where do you want to put your mark? "
             f"The open boxes are {list(opens.keys())} \n"
         ).lower()
+        if cross[::-1] in CONST_BOXES:
+            cross = cross[::-1]
 
         # valid input, cross the box
         if cross in opens:
@@ -167,6 +163,8 @@ def comp_game(size=600):
                 "Where do you want to put your mark? "
                 f"The open boxes are {list(opens.keys())} \n"
             ).lower()
+            if cross[::-1] in CONST_BOXES:
+                cross = cross[::-1]
 
             if cross in opens:
                 box_mark_cross(cross, mark_size, size)
