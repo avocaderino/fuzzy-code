@@ -4,9 +4,6 @@ import math
 
 manu = turtle.Turtle()
 manu.hideturtle()
-manu.speed(0)
-manu.pensize(3)
-
 
 def go_home():
     """Resets the turtle to its original state"""
@@ -23,7 +20,7 @@ def l_part(length, direction):
     manu.forward(length)
     if direction == "left":
         manu.left(90)
-    else:
+    elif direction == "right":
         manu.right(90)
     manu.forward(length / 3)
 
@@ -111,4 +108,3 @@ def box_mark_circle(pos, size, grid_length):
         manu.circle(size / 2.2)
     except UnboundLocalError:
         print("Wrong input")
-

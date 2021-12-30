@@ -5,9 +5,6 @@ import turtle
 from grid import grid, box_mark_cross, box_mark_circle
 
 
-CONST_BOXES = {"tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"}
-
-
 def check_win(check_box):
     """Check if a side has won"""
     # By definition,
@@ -43,20 +40,18 @@ def best_play(opens, crosses, circles):
     """Returns the computer's best move"""
     open_names = list(opens.keys())
 
-    for i in list(opens.values()):
-        circle_i = list(circles.values())
-        circle_i.append(i)  # check if marking i will result in a win
-        if check_win(circle_i):
-            return open_names[list(opens.values()).index(i)]
+    for open in list(opens.values()):
+        chance = list(circles.values()) + [open]
+        if check_win(chance):
+            return open_names[list(opens.values()).index(open)]
 
     for i in list(opens.values()):
-        cross_i = list(crosses.values())
-        cross_i.append(i)
-        if check_win(cross_i):
-            return open_names[list(opens.values()).index(i)]
+        chance = list(crosses.values()) + [open]
+        if check_win(chance):
+            return open_names[list(opens.values()).index(open)]
 
     if "mc" in opens:
-        first_moves = open_names + [ "mc" for _ in range(15)]
+        first_moves = open_names + ["mc" for _ in range(15)]
         return random.choice(first_moves)
 
     # uncomment for evil mode
@@ -67,6 +62,9 @@ def best_play(opens, crosses, circles):
     #     return random.choice(available_corners)
 
     return random.choice(open_names)
+
+
+CONST_BOXES = {"tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"}
 
 
 def user_game(size=600):
