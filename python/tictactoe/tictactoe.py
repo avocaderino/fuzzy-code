@@ -49,7 +49,7 @@ def best_play(opens, crosses, circles, mode):
             if check_win(chance):
                 return open_names[list(opens.values()).index(open)]
 
-        for i in list(opens.values()):
+        for open in list(opens.values()):
             chance = list(crosses.values()) + [open]
             if check_win(chance):
                 return open_names[list(opens.values()).index(open)]
@@ -71,7 +71,6 @@ def user_game(size=600, mode="easy"):
     """The user goes first, he is scared of a challenge"""
     grid(size)
     mark_size = 30 + 7 * size / 50
-    circles, crosses = {}, {}
     # saw this idea with magic squares on reddit, dude wrote an entire
     # Tic-Tac-Toe game in ~20 lines, pretty impressive I must say.
     opens = {
@@ -85,6 +84,7 @@ def user_game(size=600, mode="easy"):
         "bc": 1,
         "br": 8,
     }
+    crosses, circles = {}, {}
 
     while cont(opens, crosses, circles):
         cross = input(
@@ -133,7 +133,6 @@ def comp_game(size=600, mode="easy"):
     """The computer gets to start first, the user has some guts"""
     grid(size)
     mark_size = 30 + 7 * size / 50
-    circles, crosses = {}, {}
     opens = {
         "tl": 2,
         "tc": 9,
@@ -145,6 +144,7 @@ def comp_game(size=600, mode="easy"):
         "bc": 1,
         "br": 8,
     }
+    crosses, circles = {}, {}
 
     while cont(opens, crosses, circles):
 
@@ -176,7 +176,7 @@ def comp_game(size=600, mode="easy"):
             else:
                 print("Invalid response")
 
-    if check_win(list(circles.values())):
+    if check_win(+list(circles.values())):
         print("I win!")
         return False
     if check_win(list(crosses.values())):
@@ -204,7 +204,7 @@ def toss():
 
 def series_result(results):
     """Determine the result of a series"""
-    won_games, lost_games = 0, 0    
+    won_games, lost_games = 0, 0
     for result in results:
         if result is True:
             won_games += 1
