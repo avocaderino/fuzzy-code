@@ -5,6 +5,9 @@ import turtle
 from grid import grid, box_mark_cross, box_mark_circle
 
 
+CONST_BOXES = ["tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"]
+
+
 def check_win(check_box):
     """Check if a side has won"""
     # By definition,
@@ -12,10 +15,10 @@ def check_win(check_box):
         return False
 
     for box1 in check_box:
-        check2 = [box for box in check_box if box != box1]
-        for box2 in check2:
-            check3 = [box for box in check2 if box != box2]
-            for box3 in check3:
+        check_box2 = [box for box in check_box if box != box1]
+        for box2 in check_box2:
+            check_box3 = [box for box in check_box2 if box != box2]
+            for box3 in check_box3:
                 if box1 + box2 + box3 == 15:
                     return True
 
@@ -36,38 +39,35 @@ def cont(opens, crosses, circles):
     return True
 
 
-def best_play(opens, crosses, circles):
+def best_play(opens, crosses, circles, mode):
     """Returns the computer's best move"""
     open_names = list(opens.keys())
 
-    for open in list(opens.values()):
-        chance = list(circles.values()) + [open]
-        if check_win(chance):
-            return open_names[list(opens.values()).index(open)]
+    if mode[0] in ["m", "h"]:
+        for open in list(opens.values()):
+            chance = list(circles.values()) + [open]
+            if check_win(chance):
+                return open_names[list(opens.values()).index(open)]
 
-    for i in list(opens.values()):
-        chance = list(crosses.values()) + [open]
-        if check_win(chance):
-            return open_names[list(opens.values()).index(open)]
+        for i in list(opens.values()):
+            chance = list(crosses.values()) + [open]
+            if check_win(chance):
+                return open_names[list(opens.values()).index(open)]
 
-    if "mc" in opens:
-        first_moves = open_names + ["mc" for _ in range(15)]
-        return random.choice(first_moves)
+    if mode[0] in ["h"]:
+        if "mc" in opens:
+            first_moves = open_names + ["mc" for _ in range(15)]
+            return random.choice(first_moves)
 
-    # uncomment for evil mode
-
-    # if "mc" not in open_names and len(circles) < 2:
-    #     corners = ["tl", "tr", "bl", "br"]
-    #     available_corners = [corner in open_names for corner in corners]
-    #     return random.choice(available_corners)
+        if "mc" not in open_names and len(circles) < 2:
+            corners = ["tl", "tr", "bl", "br"]
+            available_corners = [corner for corner in corners if corner in open_names]
+            return random.choice(available_corners)
 
     return random.choice(open_names)
 
 
-CONST_BOXES = {"tl", "tc", "tr", "ml", "mc", "mr", "bl", "bc", "br"}
-
-
-def user_game(size=600):
+def user_game(size=600, mode="easy"):
     """The user goes first, he is scared of a challenge"""
     grid(size)
     mark_size = 30 + 7 * size / 50
@@ -105,7 +105,7 @@ def user_game(size=600):
                 break
 
             # computer's turn
-            circle = best_play(opens, crosses, circles)
+            circle = best_play(opens, crosses, circles, mode)
             print(f"The computer marked {circle}.")
             box_mark_circle(circle, mark_size, size)
             circles[circle] = opens.get(circle)
@@ -129,7 +129,7 @@ def user_game(size=600):
     print("It's a draw!")
 
 
-def comp_game(size=600):
+def comp_game(size=600, mode="easy"):
     """The computer gets to start first, the user has some guts"""
     grid(size)
     mark_size = 30 + 7 * size / 50
@@ -149,7 +149,7 @@ def comp_game(size=600):
     while cont(opens, crosses, circles):
 
         # the computer plays..
-        circle = best_play(opens, crosses, circles)
+        circle = best_play(opens, crosses, circles, mode)
         print(f"The computer marked {circle}.")
         box_mark_circle(circle, mark_size, size)
         circles[circle] = opens.get(circle)
@@ -204,21 +204,21 @@ def toss():
 
 def series_result(results):
     """Determine the result of a series"""
-    win_games = lose_games = 0
+    won_games, lost_games = 0, 0    
     for result in results:
         if result is True:
-            win_games += 1
+            won_games += 1
         elif result is False:
-            lose_games += 1
+            lost_games += 1
 
-    if win_games > lose_games:
+    if won_games > lost_games:
         # well done, my fren
-        return f"You have won the series {win_games} - {lose_games} !"
-    if lose_games > win_games:
+        return f"You have won the series {won_games} - {lost_games} !"
+    if lost_games > won_games:
         # the user is somehow dumber than me!
-        return f"You have lost the series {win_games} - {lose_games} !"
+        return f"You have lost the series {won_games} - {lost_games} !"
 
-    return f"The series has ended in a draw {win_games} - {lose_games} !"
+    return f"The series has ended in a draw {won_games} - {lost_games} !"
 
 
 def series(size=600):
@@ -228,6 +228,7 @@ def series(size=600):
         games = int(input("How many games do you want to play?: "))
     except ValueError:
         games = int(input("Please enter a number: "))
+    mode = input("\nPlease select the difficulty level (EASY/medium/hard): ").lower()
     # alternates between who gets to start first
     toss_result = toss()
     results = []
@@ -236,7 +237,7 @@ def series(size=600):
 
         # the user may be tired of this shit
         if chance >= 2:
-            skip = input(" \nDo you want to stop playing?(y/N): ").lower()
+            skip = input(" \nDo you want to stop playing? (y/N): ").lower()
             print("")
             # the user is tired ig
             if "y" in skip:
@@ -248,19 +249,19 @@ def series(size=600):
         # it alternates
         if chance % 2 == 1:
             if toss_result:
-                results.append(user_game(size))
+                results.append(user_game(size, mode))
             else:
-                results.append(comp_game(size))
+                results.append(comp_game(size, mode))
 
         # the "undeserving one" goes first
         else:
             if not toss_result:
-                results.append(user_game(size))
+                results.append(user_game(size, mode))
 
             else:
-                results.append(comp_game(size))
+                results.append(comp_game(size, mode))
 
-    # the series is over
+    # gooodbye
     print("_" * 79 + " \n \nPlease close the game window to view the results. \n")
     turtle.done()
     print(series_result(results) + "\n")

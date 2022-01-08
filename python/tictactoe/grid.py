@@ -2,8 +2,8 @@
 import turtle
 import math
 
-manu = turtle.Turtle()
-manu.hideturtle()
+manu = turtle.Turtle(visible=False)
+
 
 def go_home():
     """Resets the turtle to its original state"""
