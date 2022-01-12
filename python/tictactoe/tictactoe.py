@@ -67,7 +67,7 @@ def best_play(opens, crosses, circles, mode):
     return random.choice(open_names)
 
 
-def user_game(size=600, mode="easy"):
+def user_game(size=600, mode="hard"):
     """The user goes first, he is scared of a challenge"""
     grid(size)
     mark_size = 30 + 7 * size / 50
@@ -129,7 +129,7 @@ def user_game(size=600, mode="easy"):
     print("It's a draw!")
 
 
-def comp_game(size=600, mode="easy"):
+def comp_game(size=600, mode="hard"):
     """The computer gets to start first, the user has some guts"""
     grid(size)
     mark_size = 30 + 7 * size / 50
@@ -176,7 +176,7 @@ def comp_game(size=600, mode="easy"):
             else:
                 print("Invalid response")
 
-    if check_win(+list(circles.values())):
+    if check_win(list(circles.values())):
         print("I win!")
         return False
     if check_win(list(crosses.values())):
@@ -228,7 +228,9 @@ def series(size=600):
         games = int(input("How many games do you want to play?: "))
     except ValueError:
         games = int(input("Please enter a number: "))
-    mode = input("\nPlease select the difficulty level (EASY/medium/hard): ").lower()
+    mode = input("\nPlease select the difficulty level (Easy/Medium/Hard): ").lower()
+    if mode == "" or mode[0] not in ["e", "m", "h"]:
+        mode = "hard"
     # alternates between who gets to start first
     toss_result = toss()
     results = []
