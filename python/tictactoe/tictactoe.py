@@ -43,7 +43,7 @@ def best_play(opens, crosses, circles, mode):
     """Returns the computer's best move"""
     open_names = list(opens.keys())
 
-    if mode[0] in ["m", "h"]:
+    if mode[0] in ["h"]:
         for open in list(opens.values()):
             chance = list(circles.values()) + [open]
             if check_win(chance):
@@ -54,7 +54,6 @@ def best_play(opens, crosses, circles, mode):
             if check_win(chance):
                 return open_names[list(opens.values()).index(open)]
 
-    if mode[0] in ["h"]:
         if "mc" in opens:
             first_moves = open_names + ["mc" for _ in range(15)]
             return random.choice(first_moves)
@@ -228,7 +227,7 @@ def series(size=600):
         games = int(input("How many games do you want to play?: "))
     except ValueError:
         games = int(input("Please enter a number: "))
-    mode = input("\nPlease select the difficulty level (Easy/Medium/Hard): ").lower()
+    mode = input("\nPlease select the difficulty level (Easy/Hard): ").lower()
     if mode == "" or mode[0] not in ["e", "m", "h"]:
         mode = "hard"
     # alternates between who gets to start first
