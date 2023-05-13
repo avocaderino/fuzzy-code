@@ -16,7 +16,11 @@ def usable_word(length):
 
 def hangman(lives=7):
     """Initializes a game of hangman against the computer"""
-    num = int(input("What word length do you want?\n"))
+    num = 0
+    while num < 3:
+        num = int(input("What word length do you want?\n"))
+        if num < 3:
+            print("Minimum word length is 3!")
     word = usable_word(num)
     actual_letters = list(word)
     used_letters = letters_in_word = []
